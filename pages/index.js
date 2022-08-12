@@ -5,9 +5,31 @@ import {
   IconMapPins,
 } from "@tabler/icons";
 
+import axios from "axios";
+import { useState } from "react";
+import UserCard from "../components/UserCard";
+
 export default function Home() {
+  const [input, setInput] = useState(1);
+  const [users, setUsers] = useState([]);
+
   const genUsers = async () => {
-    const resp = await axios.get(`https://randomuser.me/api/`);
+    if (input < 1) {
+      alert("Invalid number of user");
+      return;
+    }
+    const resp = await axios.get(`https://randomuser.me/api/?results=${input}`);
+
+    const newUsers = [];
+    for (const i of resp.data.results) {
+      newUsers.push({
+        name: `${i.name.first}  ${i.name.last}`,
+        email: i.email,
+        address: `${i.location.city} ${i.location.state} ${i.location.country} ${i.location.postcode}`,
+        image: i.picture.large,
+      });
+    }
+    setUsers(newUsers);
   };
 
   return (
@@ -24,55 +46,23 @@ export default function Home() {
           className="form-control text-center"
           style={{ maxWidth: "100px" }}
           type="number"
+          onChange={(event) => setInput(event.target.value)}
+          value={input}
         />
         <button class="btn btn-dark" onClick={() => genUsers()}>
           Generate
         </button>
       </div>
 
-      {/* Example of folded UserCard */}
-      <div className="border-bottom">
-        {/* main section */}
-        <div className="d-flex align-items-center p-3">
-          <img
-            src="/profile-placeholder.jpeg"
-            width="90px"
-            class="rounded-circle me-4"
-          />
-          <span className="text-center display-6 me-auto">Name...</span>
-          <IconChevronDown />
-        </div>
-
-        {/* UserCardDetail is hidden */}
-      </div>
-
-      {/* Example of expanded UserCard */}
-      <div className="border-bottom">
-        {/* main section */}
-        <div className="d-flex align-items-center p-3">
-          <img
-            src="/profile-placeholder.jpeg"
-            width="90px"
-            class="rounded-circle me-4"
-          />
-          <span className="text-center display-6 me-auto">Name...</span>
-          <IconChevronUp />
-        </div>
-
-        {/* UserCardDetail*/}
-        <div className="text-center">
-          <p>
-            <IconMailForward /> Email...
-          </p>
-          <p>
-            <IconMapPins /> Address...
-          </p>
-        </div>
-      </div>
+      <ul>
+        {users.map((user) => (
+          <UserCard user={user} />
+        ))}
+      </ul>
 
       {/* made by section */}
       <p className="text-center mt-3 text-muted fst-italic">
-        made by Chayanin Suatap 12345679
+        made by Phanthat Muenprap 640610652
       </p>
     </div>
   );
