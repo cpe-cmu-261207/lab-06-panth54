@@ -12,8 +12,9 @@ import UserCardDetail from "../components/UserCardDetail";
 function UserCard(props) {
   const { user } = props;
   const [detail, setDetail] = useState(false);
+
   return (
-    <div className="border-bottom">
+    <div className="border-bottom" onLoad={() => setDetail(false)}>
       {/* main section */}
       <div
         className="d-flex align-items-center p-3"

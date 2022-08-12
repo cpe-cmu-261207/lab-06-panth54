@@ -54,11 +54,9 @@ export default function Home() {
         </button>
       </div>
 
-      <ul>
-        {users.map((user) => (
-          <UserCard user={user} />
-        ))}
-      </ul>
+      {users.map((user) => (
+        <UserCard user={user} />
+      ))}
 
       {/* made by section */}
       <p className="text-center mt-3 text-muted fst-italic">
